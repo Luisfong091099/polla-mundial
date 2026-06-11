@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Polla · Panamá y Colombia · 17 Jun 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --ink:#070B16; --panel:#101626; --panel2:#161E33; --line:#222C45;
+  --txt:#EAEEF8; --mut:#8A93AC;
+  --green:#19E08A; --gold:#F6C453; --coral:#FF5C7A;
+  --r:14px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh}
+body{
+  background:
+    radial-gradient(1100px 500px at 75% -8%,rgba(25,224,138,.11) 0%,transparent 60%),
+    radial-gradient(800px 400px at -5% 0%,rgba(246,196,83,.08) 0%,transparent 55%),
+    var(--ink);
+  color:var(--txt);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.45;
+}
+a{color:inherit}button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);
+  background:linear-gradient(180deg,rgba(7,11,22,.93),rgba(7,11,22,.72));border-bottom:1px solid var(--line)}
+.bar{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:11px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;margin-right:auto}
+.mark{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:20px;
+  background:linear-gradient(135deg,var(--green),#0bbf72);color:#042813;font-weight:900;box-shadow:0 6px 18px rgba(25,224,138,.32)}
+.brand h1{font-size:14px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.brand span{font-size:11px;letter-spacing:.3em;color:var(--mut);font-weight:600}
+.datebadge{background:rgba(246,196,83,.12);border:1px solid rgba(246,196,83,.35);color:var(--gold);
+  font-weight:800;border-radius:10px;padding:7px 12px;font-size:13px;white-space:nowrap}
+.who{display:flex;align-items:center;gap:8px}
+select.user{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:8px 10px;font-weight:600;font-size:13px;max-width:150px}
+.mypts{font-family:var(--mono);background:rgba(25,224,138,.1);border:1px solid rgba(25,224,138,.3);color:var(--green);font-weight:700;border-radius:9px;padding:8px 10px;font-size:13px;white-space:nowrap}
+.adminbtn{background:var(--panel);border:1px solid var(--line);color:var(--mut);border-radius:9px;padding:8px 11px;font-weight:700;font-size:12.5px;white-space:nowrap}
+.adminbtn:hover{color:var(--txt);border-color:#2e3d60}
+.adminbtn.on{color:var(--gold);border-color:rgba(246,196,83,.45);background:rgba(246,196,83,.08)}
+
+/* TABS */
+nav.tabs{max-width:1060px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:10px 16px 0;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{background:transparent;border:1px solid transparent;color:var(--mut);padding:9px 16px;border-radius:10px 10px 0 0;font-weight:700;font-size:13.5px;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--txt);background:var(--panel);border-color:var(--line);border-bottom-color:var(--panel)}
+.tab.admin-tab[aria-selected="true"]{color:var(--gold)}
+.tab:hover{color:var(--txt)}
+
+.wrap{max-width:1060px;margin:0 auto;padding:0 16px 80px}
+
+/* HERO */
+.hero{padding:24px 0 8px}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--green);font-weight:800;margin-bottom:6px}
+.eyebrow.gold{color:var(--gold)}
+.hero h2{font-size:28px;font-weight:900;letter-spacing:-.01em;line-height:1.1;margin-bottom:4px}
+.hero p{color:var(--mut);font-size:13.5px;max-width:64ch}
+
+/* SCORE RULES */
+.score-rules{display:inline-flex;flex-wrap:wrap;gap:10px;margin:12px 0 20px;background:rgba(22,30,51,.7);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.score-rules .pill{font-size:12px;color:var(--mut)}
+.score-rules .pill b{color:var(--gold);font-family:var(--mono)}
+
+/* GRID + CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-bottom:28px}
+.card{background:linear-gradient(180deg,var(--panel),#0d1322);border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 12px;position:relative;transition:border-color .2s}
+.card:hover{border-color:#2e3d60}
+.card .meta{font-size:11px;color:var(--mut);font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.jtag{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--green);letter-spacing:.04em}
+.htag{color:var(--mut);font-size:11px}
+.fixture{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px}
+.team{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
+.flag{height:34px;width:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.5);object-fit:cover;display:block}
+.flag.tbd{display:inline-grid;place-items:center;background:var(--panel2);border:1px dashed var(--line);color:var(--mut);font-weight:800;width:50px;height:34px;box-shadow:none;font-size:14px}
+.flag.emoji{font-size:28px;line-height:1;box-shadow:none}
+.tname{font-size:12px;font-weight:700;min-height:30px;display:flex;align-items:center;justify-content:center}
+.team.isTbd .tname{color:var(--mut);font-size:11px}
+.vs{display:flex;flex-direction:column;align-items:center;gap:4px}
+.inputs{display:flex;align-items:center;gap:5px}
+.digit{width:46px;height:52px;border-radius:9px;background:#070c18;border:1px solid var(--line);color:var(--gold);font-family:var(--mono);font-size:24px;font-weight:700;text-align:center;-moz-appearance:textfield}
+.digit::-webkit-outer-spin-button,.digit::-webkit-inner-spin-button{-webkit-appearance:none}
+.digit:focus{border-color:var(--gold);outline:none}
+.dash{color:var(--mut);font-weight:800;font-size:16px}
+.winline{margin-top:10px;text-align:center;font-size:11.5px;color:var(--mut);min-height:16px;font-weight:600}
+.winline b{color:var(--green)} .winline.draw b{color:var(--gold)}
+.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.more summary{cursor:pointer;font-size:12px;color:var(--mut);font-weight:700;list-style:none;user-select:none}
+.more summary::-webkit-details-marker{display:none}
+.more summary::before{content:"＋ ";color:var(--green)}
+.more[open] summary::before{content:"− "}
+.xtra{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.xtra-wide{grid-column:1 / -1}
+.field label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:4px;font-weight:700}
+.field input,.field select{width:100%;background:#070c18;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 9px;font-size:12.5px;font-family:inherit}
+.field input:focus,.field select:focus{border-color:var(--green);outline:none}
+.saved{position:absolute;top:12px;right:12px;font-size:10px;color:var(--green);font-weight:700;opacity:0;transition:opacity .3s}
+.saved.on{opacity:1}
+.earned{margin-top:8px;font-size:11.5px;font-family:var(--mono)}
+.earned .ok{color:var(--gold)} .earned .rt{color:var(--mut)}
+
+/* RANK box / table */
+.rank-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th,td{padding:13px 14px;text-align:left;font-size:13px}
+th{color:var(--mut);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+tbody tr{border-bottom:1px solid rgba(34,44,69,.5)} tbody tr:last-child{border-bottom:none}
+.pos{font-family:var(--mono);color:var(--mut);width:30px}.pos.top{color:var(--gold)}
+.rname{font-weight:700}.rme{color:var(--green)}
+.rpts{font-family:var(--mono);color:var(--gold);font-weight:700;text-align:right}
+.medal{font-size:15px}
+.bar-w{height:6px;width:80px;background:#0a0f1d;border:1px solid var(--line);border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}
+.bar-f{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--gold))}
+
+/* LEADERBOARD */
+.lb{display:flex;flex-direction:column;gap:10px}
+.lb-row{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .2s}
+.lb-row.me{border-color:rgba(25,224,138,.45);background:linear-gradient(180deg,rgba(25,224,138,.07),var(--panel))}
+.lb-row.lead{border-color:rgba(246,196,83,.4)}
+.lb-head{display:flex;align-items:center;gap:13px;padding:14px 16px;cursor:pointer;user-select:none}
+.lb-pos{width:26px;text-align:center;font-family:var(--mono);font-weight:800;color:var(--mut);flex-shrink:0}
+.lb-pos .medal{font-size:19px}
+.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--panel2);border:2px solid var(--line);color:var(--txt);flex-shrink:0}
+.lb-row.me .avatar{border-color:var(--green);color:var(--green)}
+.lb-row.lead .avatar{border-color:var(--gold)}
+.lb-name{font-weight:700;flex:1;line-height:1.3;font-size:14px}
+.lb-name .me-tag{color:var(--green);font-size:10px;font-weight:800;margin-left:5px;letter-spacing:.05em}
+.lb-pts{font-family:var(--mono);font-weight:800;color:var(--gold);font-size:20px}
+.chev{color:var(--mut);transition:transform .2s;margin-left:6px;font-size:16px}
+.lb-row.open .chev{transform:rotate(180deg)}
+.lb-detail{display:none;padding:4px 16px 12px}
+.lb-row.open .lb-detail{display:block}
+.lb-d-row{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:9px 0;font-size:12.5px;border-top:1px solid rgba(34,44,69,.5)}
+.lb-d-row .mt{font-weight:600;display:flex;align-items:center;gap:3px;flex:1}
+.lb-d-row .vals{color:var(--mut);font-family:var(--mono);font-size:11px;white-space:nowrap}
+.lb-d-pts{font-family:var(--mono);font-weight:800;color:var(--green);min-width:36px;text-align:right}
+.lb-empty-pts{color:var(--mut)}
+.lb-mblock{padding:11px 0;border-top:1px solid rgba(34,44,69,.5)}
+.lb-mhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px}
+.lb-mhead .mt{font-weight:600;display:flex;align-items:center;gap:3px}
+.lb-mhead .vals{color:var(--mut);font-family:var(--mono);font-size:11px;margin-left:auto}
+.lb-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.lb-chip{font-size:10.5px;font-weight:700;border-radius:6px;padding:3px 8px;border:1px solid var(--line);color:var(--mut);background:var(--panel2)}
+.lb-chip.hit{color:var(--green);border-color:rgba(25,224,138,.4);background:rgba(25,224,138,.1)}
+.lb-chip.miss{opacity:.65}
+.lb-chip.pend{color:var(--gold);border-color:rgba(246,196,83,.3);background:rgba(246,196,83,.08)}
+
+/* ADMIN subnav + stats */
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 20px}
+.subtab{background:var(--panel);border:1px solid var(--line);color:var(--mut);border-radius:10px;padding:9px 14px;font-weight:700;font-size:13px}
+.subtab[aria-pressed="true"]{color:var(--gold);border-color:rgba(246,196,83,.45);background:rgba(246,196,83,.08)}
+.subtab:hover{color:var(--txt)}
+.dstats{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px}
+.dstats .s b{font-family:var(--mono);font-size:26px;color:var(--green);font-weight:800;display:block;line-height:1.1}
+.dstats .s span{font-size:11px;color:var(--mut)}
+
+/* QR / boxes */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:680px){.two{grid-template-columns:1fr}}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.box h4{font-size:15px;font-weight:800;margin-bottom:4px}
+.box p{color:var(--mut);font-size:13px;margin-bottom:14px}
+.qr-shell{background:#fff;border-radius:12px;padding:14px;width:fit-content;margin:0 auto 14px}
+#qrcode{display:grid;place-items:center}
+.urlrow{display:flex;gap:8px;margin-bottom:10px}
+.urlrow input{flex:1;background:#070c18;border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 11px;font-size:13px}
+.btn{background:linear-gradient(135deg,var(--green),#0bbf72);color:#04240f;border:none;border-radius:9px;padding:10px 14px;font-weight:800;font-size:13px}
+.btn.coral{background:linear-gradient(135deg,var(--coral),#d63a59);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+.btn:active{transform:translateY(1px)}
+.rules-list{list-style:none;padding:0;margin-top:10px}
+.rules-list li{margin:5px 0;font-size:13px;color:var(--mut)}
+.rules-list b{color:var(--gold);font-family:var(--mono)}
+.stat-big{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.stat-big b{font-family:var(--mono);font-size:30px;color:var(--green);font-weight:800}
+.stat-big span{color:var(--mut);font-size:13px}
+
+/* ADMIN result input */
+.adm-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.adm-top{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--mut);margin-bottom:8px;flex-wrap:wrap}
+.adm-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.adm-nm{font-size:12.5px;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.adm-sc{width:44px;height:40px;background:#070c18;border:1px solid var(--line);color:var(--gold);font-family:var(--mono);font-size:17px;text-align:center;border-radius:8px;-moz-appearance:textfield}
+.adm-sc::-webkit-outer-spin-button,.adm-sc::-webkit-inner-spin-button{-webkit-appearance:none}
+.adm-sc:focus{border-color:var(--green);outline:none}
+.adm-extra{display:grid;grid-template-columns:1fr 86px 86px;gap:8px;margin-top:8px}
+.adm-extra input,.adm-extra select{background:#070c18;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 9px;font-size:12.5px;font-family:inherit}
+.adm-extra input:focus,.adm-extra select:focus{border-color:var(--green);outline:none}
+
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(4,7,14,.75);backdrop-filter:blur(5px);display:grid;place-items:center;z-index:50;padding:20px}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:360px;width:100%}
+.modal h3{font-size:19px;font-weight:900;margin-bottom:6px}
+.modal p{color:var(--mut);font-size:13.5px;margin-bottom:14px}
+.modal input{width:100%;background:#070c18;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:11px;font-size:15px;margin-bottom:12px}
+.modal input:focus{border-color:var(--green);outline:none}
+.modal input.pin{text-align:center;letter-spacing:.3em}
+.empty{text-align:center;color:var(--mut);padding:36px 20px;font-size:14px}
+.foot{padding:20px 0 10px;color:var(--mut);font-size:11.5px;border-top:1px solid var(--line);margin-top:28px}
+
+/* flag-sm */
+.scorer-sel{width:100%;background:#070c18;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 9px;font-size:12.5px;font-family:inherit}
+.scorer-sel:focus{border-color:var(--green);outline:none}
+.scorer-sel option{background:#0d1322;color:var(--txt)}
+.scorer-sel optgroup{color:var(--green);font-weight:800;font-style:normal}
+.scorer-sel optgroup optgroup{color:var(--mut);font-weight:700;font-style:normal}
+.flag-sm.tbd{width:20px;height:14px;display:inline-grid;place-items:center;background:var(--panel2);border:1px dashed var(--line);color:var(--mut);font-size:9px;border-radius:2px}
+.flag-sm.emoji{font-size:14px;box-shadow:none}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <div class="mark">⚽</div>
+      <div><h1>Polla Mundial 2026</h1><span>NORTEAMÉRICA 2026</span></div>
+    </div>
+    <div class="datebadge">📅 Mié 17 Jun</div>
+    <div class="who" id="whoBox">
+      <select class="user" id="userSel" aria-label="Jugador actual"></select>
+      <span class="mypts" id="myPts">0 pts</span>
+    </div>
+    <button class="adminbtn" id="adminBtn">🔒 Admin</button>
+  </div>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+</header>
+
+<div class="wrap">
+  <main id="view"></main>
+  <div class="foot" id="foot"></div>
+</div>
+<div id="mroot"></div>
+
+<script>
+/* ── PLANTILLAS OFICIALES Mundial 2026 ── */
+const SQUADS = {
+  pa: {
+    name:'Panamá', iso:'pa',
+    players:[
+      {pos:'POR', name:'Orlando Mosquera'},{pos:'POR', name:'Luis Mejía'},{pos:'POR', name:'César Samudio'},
+      {pos:'DEF', name:'César Blackman'},{pos:'DEF', name:'Jorge Gutiérrez'},{pos:'DEF', name:'Amir Murillo'},
+      {pos:'DEF', name:'Fidel Escobar'},{pos:'DEF', name:'Andrés Andrade'},{pos:'DEF', name:'Edgardo Fariña'},
+      {pos:'DEF', name:'José Córdoba'},{pos:'DEF', name:'Eric Davis'},{pos:'DEF', name:'Jiovany Ramos'},
+      {pos:'DEF', name:'Roderick Miller'},
+      {pos:'MED', name:'Aníbal Godoy'},{pos:'MED', name:'Adalberto Carrasquilla'},{pos:'MED', name:'Carlos Harvey'},
+      {pos:'MED', name:'Cristian Martínez'},{pos:'MED', name:'José Luis Rodríguez'},{pos:'MED', name:'César Yanis'},
+      {pos:'MED', name:'Yoel Bárcenas'},{pos:'MED', name:'Alberto Quintero'},{pos:'MED', name:'Azarías Londoño'},
+      {pos:'DEL', name:'Ismael Díaz'},{pos:'DEL', name:'Cecilio Waterman'},{pos:'DEL', name:'José Fajardo'},
+      {pos:'DEL', name:'Tomás Rodríguez'},
+    ]
+  },
+  gh: {
+    name:'Ghana', iso:'gh',
+    players:[
+      {pos:'POR', name:'Lawrence Ati-Zigi'},{pos:'POR', name:'Ibrahim Danlad'},{pos:'POR', name:'Joseph Wollacott'},
+      {pos:'DEF', name:'Alexander Djiku'},{pos:'DEF', name:'Daniel Amartey'},{pos:'DEF', name:'Tariq Lamptey'},
+      {pos:'DEF', name:'Dennis Odoi'},{pos:'DEF', name:'Baba Rahman'},{pos:'DEF', name:'Gideon Mensah'},
+      {pos:'DEF', name:'Jonathan Mensah'},{pos:'DEF', name:'Abdul Mumin'},
+      {pos:'MED', name:'Thomas Partey'},{pos:'MED', name:'Daniel-Kofi Kyereh'},{pos:'MED', name:'Salis Abdul Samed'},
+      {pos:'MED', name:'Elisha Owusu'},{pos:'MED', name:'Kudus Mohammed'},{pos:'MED', name:'Antoine Semenyo'},
+      {pos:'MED', name:'Jordan Ayew'},{pos:'MED', name:'Andre Ayew'},
+      {pos:'DEL', name:'Inaki Williams'},{pos:'DEL', name:'Osman Bukari'},{pos:'DEL', name:'Felix Afena-Gyan'},
+      {pos:'DEL', name:'Richmond Boakye'},{pos:'DEL', name:'Ernest Nuamah'},{pos:'DEL', name:'Emmanuel Gyasi'},
+    ]
+  },
+  uz: {
+    name:'Uzbekistán', iso:'uz',
+    players:[
+      {pos:'POR', name:'Utkir Yusupov'},{pos:'POR', name:'Eldor Shomurodov (POR)'},{pos:'POR', name:'Bekzod Nishonov'},
+      {pos:'DEF', name:'Oybek Bozorov'},{pos:'DEF', name:'Husayn Norchaev'},{pos:'DEF', name:'Jasurbek Yakhshiboev'},
+      {pos:'DEF', name:'Abbosbek Fayzullaev'},{pos:'DEF', name:'Otabek Shukurov'},{pos:'DEF', name:'Khayrulla Ochilov'},
+      {pos:'DEF', name:'Nodir Tursunov'},{pos:'DEF', name:'Dilshod Narzullaev'},
+      {pos:'MED', name:'Jaloliddin Masharipov'},{pos:'MED', name:'Otabek Shukurov'},{pos:'MED', name:'Bobur Abdixoliqov'},
+      {pos:'MED', name:'Doston Tursunov'},{pos:'MED', name:'Sardor Rashidov'},{pos:'MED', name:'Shamsiddin Karimov'},
+      {pos:'MED', name:'Ulugbek Asrorov'},{pos:'MED', name:'Azizbek Yunusov'},
+      {pos:'DEL', name:'Eldor Shomurodov'},{pos:'DEL', name:'Dostonbek Khamdamov'},{pos:'DEL', name:'Otabek Eshmurodov'},
+      {pos:'DEL', name:'Farrux Sayfiev'},{pos:'DEL', name:'Djasurbek Akhmedov'},{pos:'DEL', name:'Temur Juraev'},
+    ]
+  },
+  co: {
+    name:'Colombia', iso:'co',
+    players:[
+      {pos:'POR', name:'David Ospina'},{pos:'POR', name:'Camilo Vargas'},{pos:'POR', name:'Álvaro Montero'},
+      {pos:'DEF', name:'Daniel Muñoz'},{pos:'DEF', name:'Santiago Arias'},{pos:'DEF', name:'Davinson Sánchez'},
+      {pos:'DEF', name:'Jhon Lucumí'},{pos:'DEF', name:'Yerry Mina'},{pos:'DEF', name:'Willer Ditta'},
+      {pos:'DEF', name:'Déiver Machado'},{pos:'DEF', name:'Johan Mojica'},
+      {pos:'MED', name:'James Rodríguez'},{pos:'MED', name:'Richard Ríos'},{pos:'MED', name:'Jefferson Lerma'},
+      {pos:'MED', name:'Jhon Arias'},{pos:'MED', name:'Jorge Carrascal'},{pos:'MED', name:'Kevin Castaño'},
+      {pos:'MED', name:'Juan Fernando Quintero'},{pos:'MED', name:'Gustavo Puerta'},{pos:'MED', name:'Juan Portilla'},
+      {pos:'MED', name:'Jaminton Campaz'},
+      {pos:'DEL', name:'Luis Díaz'},{pos:'DEL', name:'Luis Suárez'},{pos:'DEL', name:'Jhon Córdoba'},
+      {pos:'DEL', name:'Carlos Gómez'},{pos:'DEL', name:'Juan Camilo Hernández'},
+    ]
+  },
+};
+
+/* Dado un match, devuelve los isos de los dos equipos para armar el selector */
+function matchTeamIsos(matchId){
+  const map = { 'L2':['gh','pa'], 'K2':['uz','co'] };
+  return map[matchId] || [];
+}
+const MATCHES = [
+  {id:'L2', g:'L', jor:1,
+   home:{n:'Ghana',      iso:'gh', emoji:'🇬🇭'},
+   away:{n:'Panamá',     iso:'pa', emoji:'🇵🇦'},
+   hora:'17:00', sede:'BMO Field, Toronto'},
+  {id:'K2', g:'K', jor:1,
+   home:{n:'Uzbekistán', iso:'uz', emoji:'🇺🇿'},
+   away:{n:'Colombia',   iso:'co', emoji:'🇨🇴'},
+   hora:'20:00', sede:'Estadio Azteca, Ciudad de México'},
+];
+const TOTAL = MATCHES.length;
+
+/* ── FLAGS ── */
+function flagHTML(team, cls='flag'){
+  if(team.tbd || !team.iso) return `<span class="${cls} tbd">?</span>`;
+  return `<img class="${cls}" src="https://flagcdn.com/w80/${team.iso}.png" srcset="https://flagcdn.com/w160/${team.iso}.png 2x" alt="${esc(team.n)}" loading="lazy" data-emoji="${team.emoji}" onerror="flagFail(this)">`;
+}
+window.flagFail=function(img){ const s=document.createElement('span'); s.className=img.className+' emoji'; s.textContent=img.dataset.emoji||'🏳️'; img.replaceWith(s); };
+
+
+/* ── SUPABASE ── */
+const SB_URL  = 'https://fpfbsvqrggggxptuwjfl.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwZmJzdnFyZ2dnZ3hwdHV3amZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDI4NTUsImV4cCI6MjA5Njc3ODg1NX0.TeJya592mFeQmGfZ7d9lobvbcsJbJEyrw28fTa9NmCo';
+const HDR     = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+const sb = {
+  /* ── participants ── */
+  async getParticipants(){
+    const r = await fetch(`${SB_URL}/rest/v1/participants?select=id,name&order=created_at.asc`,{headers:HDR});
+    return r.ok ? r.json() : [];
+  },
+  async addParticipant(id, name){
+    await fetch(`${SB_URL}/rest/v1/participants`,{method:'POST',headers:{...HDR,'Prefer':'resolution=ignore-duplicates'},body:JSON.stringify({id,name})});
+  },
+
+  /* ── predictions ── */
+  async getPredictions(userId){
+    const r = await fetch(`${SB_URL}/rest/v1/predictions?user_id=eq.${userId}&select=match_id,home,away,scorer,yellow,red`,{headers:HDR});
+    if(!r.ok) return {};
+    const rows = await r.json();
+    const out = {};
+    rows.forEach(x=>{ out[x.match_id]={h:x.home,a:x.away,scorer:x.scorer,yellow:x.yellow,red:x.red}; });
+    return out;
+  },
+  async upsertPrediction(userId, matchId, pred){
+    await fetch(`${SB_URL}/rest/v1/predictions`,{
+      method:'POST',
+      headers:{...HDR,'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({user_id:userId,match_id:matchId,home:num(pred.h),away:num(pred.a),scorer:pred.scorer||null,yellow:num(pred.yellow),red:num(pred.red),updated_at:new Date().toISOString()})
+    });
+  },
+  async getAllPredictions(){
+    const r = await fetch(`${SB_URL}/rest/v1/predictions?select=user_id,match_id,home,away,scorer,yellow,red`,{headers:HDR});
+    return r.ok ? r.json() : [];
+  },
+
+  /* ── results ── */
+  async getResults(){
+    const r = await fetch(`${SB_URL}/rest/v1/results?select=match_id,home,away,scorer,yellow,red`,{headers:HDR});
+    if(!r.ok) return {};
+    const rows = await r.json();
+    const out = {};
+    rows.forEach(x=>{ out[x.match_id]={h:x.home,a:x.away,scorer:x.scorer,yellow:x.yellow,red:x.red}; });
+    return out;
+  },
+  async upsertResult(matchId, res){
+    await fetch(`${SB_URL}/rest/v1/results`,{
+      method:'POST',
+      headers:{...HDR,'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({match_id:matchId,home:num(res.h),away:num(res.a),scorer:res.scorer||null,yellow:num(res.yellow),red:num(res.red),updated_at:new Date().toISOString()})
+    });
+  }
+};
+
+
+/* ── CONFIG / SCORING ── */
+const CFG={exact:5,outcome:3,scorer:2,cardsY:1,cardsR:1,pin:'1234',url:''};
+function num(v){ if(v===''||v==null)return null; const n=Number(v); return isNaN(n)?null:n; }
+function norm(s){ return (s||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function pointsFor(pred,res){
+  if(!pred||!res)return 0; let p=0;
+  const ph=num(pred.h),pa=num(pred.a),rh=num(res.h),ra=num(res.a);
+  if(ph!==null&&pa!==null&&rh!==null&&ra!==null){
+    if(ph===rh&&pa===ra)p+=CFG.exact;
+    else if(Math.sign(ph-pa)===Math.sign(rh-ra))p+=CFG.outcome;
+  }
+  if(pred.scorer&&res.scorer&&norm(pred.scorer)===norm(res.scorer))p+=CFG.scorer;
+  if(pred.yellow!=null&&pred.yellow!==''&&res.yellow!=null&&res.yellow!==''&&Number(pred.yellow)===Number(res.yellow))p+=CFG.cardsY;
+  if(pred.red!=null&&pred.red!==''&&res.red!=null&&res.red!==''&&Number(pred.red)===Number(res.red))p+=CFG.cardsR;
+  return p;
+}
+function breakdown(pred,res){
+  if(!res||num(res.h)===null||num(res.a)===null) return null; // partido sin resultado aún
+  const parts=[];
+  const ph=num(pred?.h),pa=num(pred?.a),rh=num(res.h),ra=num(res.a);
+  let sp=0,sl='Marcador';
+  if(ph!==null&&pa!==null){
+    if(ph===rh&&pa===ra){ sp=CFG.exact; sl='🎯 Marcador exacto'; }
+    else if(Math.sign(ph-pa)===Math.sign(rh-ra)){ sp=CFG.outcome; sl='✅ Acertó ganador'; }
+    else sl='Marcador';
+  }
+  parts.push({label:sl,pts:sp,hit:sp>0});
+  if(res.scorer){ const hit=pred?.scorer&&norm(pred.scorer)===norm(res.scorer); parts.push({label:'⚽ Goleador',pts:hit?CFG.scorer:0,hit}); }
+  if(res.yellow!=null&&res.yellow!==''){ const hit=pred?.yellow!=null&&pred.yellow!==''&&Number(pred.yellow)===Number(res.yellow); parts.push({label:'🟨 Amarillas',pts:hit?CFG.cardsY:0,hit}); }
+  if(res.red!=null&&res.red!==''){ const hit=pred?.red!=null&&pred.red!==''&&Number(pred.red)===Number(res.red); parts.push({label:'🟥 Rojas',pts:hit?CFG.cardsR:0,hit}); }
+  return {total:parts.reduce((s,x)=>s+x.pts,0),parts};
+}
+
+/* ── STATE ── */
+let participants=[], me=null, myPreds={}, results={};
+let activeTab='play', adminUnlocked=false, adminSection='recv';
+/* Modo "unirme": si el QR apunta a .../unirme (#unirme), se oculta el acceso admin */
+let joinOnly=false;
+try{ joinOnly = /unirme|join/i.test(location.hash||''); }catch(e){}
+
+/* ── INIT ── */
+(async()=>{
+  participants = await sb.getParticipants();
+  results      = await sb.getResults();
+  if(participants.length){ me=participants[0].id; myPreds=await sb.getPredictions(me); }
+  if(joinOnly) document.getElementById('adminBtn').style.display='none';
+  buildNav(); renderTabs(); renderFoot();
+  if(!participants.length) openJoin(true); else render();
+})();
+
+/* ── NAV ── */
+function buildNav(){
+  document.getElementById('tabs').addEventListener('click',e=>{
+    const b=e.target.closest('.tab'); if(!b) return;
+    activeTab=b.dataset.tab; renderTabs(); render();
+  });
+  rebuildSel();
+  document.getElementById('userSel').addEventListener('change',async e=>{
+    if(e.target.value==='__add'){ openJoin(false); return; }
+    me=e.target.value; myPreds=await sb.getPredictions(me); updatePts(); render();
+  });
+  document.getElementById('adminBtn').addEventListener('click',()=>{
+    if(adminUnlocked){ // salir de admin
+      adminUnlocked=false; if(activeTab==='admin') activeTab='play';
+      setAdminBtn(); renderTabs(); render();
+    } else openAdminGate();
+  });
+}
+function setAdminBtn(){
+  const b=document.getElementById('adminBtn');
+  b.textContent = adminUnlocked ? '🔓 Salir admin' : '🔒 Admin';
+  b.classList.toggle('on', adminUnlocked);
+}
+function renderTabs(){
+  const base=[['play','Pronósticos'],['rank','Ranking'],['mine','Mi polla']];
+  if(adminUnlocked) base.push(['admin','⚙ Panel admin']);
+  document.getElementById('tabs').innerHTML = base.map(([k,l])=>
+    `<button class="tab ${k==='admin'?'admin-tab':''}" role="tab" data-tab="${k}" aria-selected="${k===activeTab}">${l}</button>`).join('');
+}
+function rebuildSel(){
+  document.getElementById('userSel').innerHTML =
+    participants.map(p=>`<option value="${p.id}" ${p.id===me?'selected':''}>${esc(p.name)}</option>`).join('')+
+    `<option value="__add">＋ Unirme / agregar…</option>`;
+}
+async function updatePts(){
+  let t=0; for(const m of MATCHES) t+=pointsFor(myPreds[m.id],results[m.id]);
+  document.getElementById('myPts').textContent=t+' pts';
+}
+
+/* ── RENDER ── */
+function render(){
+  const v=document.getElementById('view');
+  if(activeTab==='play'){ v.innerHTML=viewPlay(); wirePlay(); }
+  else if(activeTab==='rank') renderRank(v);
+  else if(activeTab==='mine'){ v.innerHTML=viewMine(); }
+  else if(activeTab==='admin'){ if(!adminUnlocked){activeTab='play';return render();} v.innerHTML=viewAdmin(); wireAdmin(); }
+  updatePts();
+}
+
+/* ── PRONÓSTICOS ── */
+function viewPlay(){
+  const cards=[...MATCHES].sort((a,b)=>a.hora.localeCompare(b.hora)).map(matchCard).join('');
+  return `
+  <section class="hero">
+    <div class="eyebrow">Miércoles 17 de junio · 2 partidos</div>
+    <h2>Tus pronósticos</h2>
+    <p>Predice el marcador exacto. El ganador se calcula solo. Despliega "más" para agregar goleador y tarjetas.</p>
+    <div class="score-rules">
+      <span class="pill">Marcador exacto · <b>${CFG.exact} pts</b></span>
+      <span class="pill">Ganador/empate · <b>${CFG.outcome} pts</b></span>
+      <span class="pill">Goleador · <b>+${CFG.scorer} pts</b></span>
+      <span class="pill">🟨 Amarillas · <b>+${CFG.cardsY} pt</b></span>
+      <span class="pill">🟥 Rojas · <b>+${CFG.cardsR} pt</b></span>
+    </div>
+  </section>
+  <div class="grid" id="grid">${cards}</div>`;
+}
+function scorerSelect(matchId, selected){
+  const isos = matchTeamIsos(matchId);
+  const POS_LABEL = {POR:'Porteros',DEF:'Defensas',MED:'Mediocampistas',DEL:'Delanteros'};
+  let opts = `<option value="">— Seleccionar jugador —</option>`;
+  for(const iso of isos){
+    const squad = SQUADS[iso]; if(!squad) continue;
+    const byPos = {};
+    squad.players.forEach(p=>{ (byPos[p.pos]=byPos[p.pos]||[]).push(p); });
+    opts += `<optgroup label="🏳 ${esc(squad.name)}">`;
+    for(const pos of ['POR','DEF','MED','DEL']){
+      if(!byPos[pos]) continue;
+      opts += `<optgroup label="  ${POS_LABEL[pos]}">`;
+      byPos[pos].forEach(p=>{
+        opts += `<option value="${esc(p.name)}" ${p.name===selected?'selected':''}>${esc(p.name)}</option>`;
+      });
+      opts += `</optgroup>`;
+    }
+    opts += `</optgroup>`;
+  }
+  return `<select data-k="scorer" class="scorer-sel">${opts}</select>`;
+}
+function matchCard(m){
+  const p=myPreds[m.id]||{}, r=results[m.id];
+  const wl=winLine(p,m);
+  const earned=r?`<div class="earned"><span class="ok">+${pointsFor(p,r)} pts</span> <span class="rt">· resultado ${num(r.h)??'–'}-${num(r.a)??'–'}</span></div>`:'';
+  return `
+  <div class="card" data-id="${m.id}">
+    <span class="saved" id="sv_${m.id}">✓ guardado</span>
+    <div class="meta"><span class="jtag">Grupo ${m.g} · Jornada ${m.jor}</span><span class="htag">⏰ ${m.hora} mx</span><span class="htag">📍 ${esc(m.sede)}</span></div>
+    <div class="fixture">
+      <div class="team ${m.home.tbd?'isTbd':''}">${flagHTML(m.home)}<span class="tname">${esc(m.home.n)}</span></div>
+      <div class="vs"><div class="inputs">
+        <input class="digit" type="number" min="0" max="20" inputmode="numeric" data-k="h" value="${p.h??''}" aria-label="Goles ${esc(m.home.n)}">
+        <span class="dash">–</span>
+        <input class="digit" type="number" min="0" max="20" inputmode="numeric" data-k="a" value="${p.a??''}" aria-label="Goles ${esc(m.away.n)}">
+      </div></div>
+      <div class="team ${m.away.tbd?'isTbd':''}">${flagHTML(m.away)}<span class="tname">${esc(m.away.n)}</span></div>
+    </div>
+    <div class="winline ${wl.cls}" id="wl_${m.id}">${wl.html}</div>
+    <details class="more"><summary>más — goleador y tarjetas</summary>
+      <div class="xtra">
+        <div class="field xtra-wide"><label>⚽ Goleador</label>${scorerSelect(m.id, p.scorer||'')}</div>
+        <div class="field"><label>🟨 Amarillas</label><select data-k="yellow"><option value="">—</option>${[0,1,2,3,4,5,6,7,8].map(n=>`<option value="${n}" ${String(p.yellow)===String(n)?'selected':''}>${n}${n===8?'+':''}</option>`).join('')}</select></div>
+        <div class="field"><label>🟥 Rojas</label><select data-k="red"><option value="">—</option>${[0,1,2,3].map(n=>`<option value="${n}" ${String(p.red)===String(n)?'selected':''}>${n}${n===3?'+':''}</option>`).join('')}</select></div>
+      </div>
+    </details>
+    ${earned}
+  </div>`;
+}
+function winLine(p,m){
+  const h=num(p.h),a=num(p.a);
+  if(h===null||a===null) return {cls:'',html:'<span>Sin pronóstico</span>'};
+  if(h===a) return {cls:'draw',html:`Empate <b>${h}-${a}</b>`};
+  return {cls:'',html:`Gana <b>${esc(h>a?m.home.n:m.away.n)}</b> (${h}–${a})`};
+}
+function wirePlay(){
+  const g=document.getElementById('grid');
+  g.addEventListener('input',onPred); g.addEventListener('change',onPred);
+}
+async function onPred(e){
+  const card=e.target.closest('.card'); if(!card) return;
+  const id=card.dataset.id,k=e.target.dataset.k; if(!k) return;
+  myPreds[id]=myPreds[id]||{}; myPreds[id][k]=e.target.value;
+  const m=MATCHES.find(x=>x.id===id), wl=document.getElementById('wl_'+id);
+  const {cls,html}=winLine(myPreds[id],m); wl.className='winline '+cls; wl.innerHTML=html;
+  await sb.upsertPrediction(me, id, myPreds[id]);
+  const sv=document.getElementById('sv_'+id); sv.classList.add('on'); setTimeout(()=>sv.classList.remove('on'),900);
+  updatePts();
+}
+
+/* ── RANKING ── */
+async function renderRank(v){
+  v.innerHTML=`<section class="hero"><div class="eyebrow">Clasificación</div><h2>Tabla de posiciones</h2>
+    <p>Puntos acumulados de los ${TOTAL} partidos. Toca un jugador para ver el desglose.</p></section>
+    <div class="lb" id="lb"><div class="empty">Calculando…</div></div>`;
+  const rows=[];
+  const allPreds = await sb.getAllPredictions();
+  const byUser = {};
+  allPreds.forEach(r=>{ if(!byUser[r.user_id]) byUser[r.user_id]={}; byUser[r.user_id][r.match_id]={h:r.home,a:r.away,scorer:r.scorer,yellow:r.yellow,red:r.red}; });
+  for(const p of participants){
+    const pr = byUser[p.id]||{};
+    let pts=0; const detail=[];
+    for(const m of MATCHES){ const x=pointsFor(pr[m.id],results[m.id]); pts+=x; detail.push({m,pred:pr[m.id],pts:x}); }
+    const done=MATCHES.filter(m=>{const x=pr[m.id];return x&&num(x.h)!==null&&num(x.a)!==null;}).length;
+    rows.push({...p,pts,done,detail});
+  }
+  rows.sort((a,b)=>b.pts-a.pts||b.done-a.done||a.name.localeCompare(b.name));
+  const medals={0:'🏆',1:'🥈',2:'🥉'};
+  const lb=document.getElementById('lb');
+  if(!rows.length){ lb.innerHTML='<div class="rank-box"><div class="empty">Aún no hay jugadores. Comparte el QR para que se unan.</div></div>'; return; }
+  lb.innerHTML=rows.map((r,i)=>{
+    const detail=r.detail.map(x=>{
+      const m=x.m,pr=x.pred,res=results[m.id];
+      const predTxt=pr&&num(pr.h)!==null&&num(pr.a)!==null?`${num(pr.h)}–${num(pr.a)}`:'sin pronóstico';
+      const bd=breakdown(pr,res);
+      let chips,tot;
+      if(!bd){ chips=`<span class="lb-chip pend">resultado pendiente</span>`; tot='<span class="lb-empty-pts">—</span>'; }
+      else { chips=bd.parts.map(pt=>`<span class="lb-chip ${pt.hit?'hit':'miss'}">${pt.label} ${pt.hit?'+'+pt.pts:'0'}</span>`).join(''); tot='+'+bd.total; }
+      return `<div class="lb-mblock">
+        <div class="lb-mhead"><span class="mt">${flagHTML(m.home,'flag-sm')}${esc(m.home.n)} vs ${esc(m.away.n)}${flagHTML(m.away,'flag-sm')}</span>
+          <span class="vals">tú ${predTxt}${res&&num(res.h)!==null?` · real ${num(res.h)}–${num(res.a)}`:''}</span>
+          <span class="lb-d-pts">${tot}</span></div>
+        <div class="lb-chips">${chips}</div>
+      </div>`;
+    }).join('');
+    return `<div class="lb-row ${r.id===me?'me':''} ${i===0?'lead':''}">
+      <div class="lb-head">
+        <span class="lb-pos">${medals[i]?`<span class="medal">${medals[i]}</span>`:i+1}</span>
+        <span class="avatar">${esc(initials(r.name))}</span>
+        <span class="lb-name">${esc(r.name)}${r.id===me?'<span class="me-tag">(TÚ)</span>':''}<br><span style="font-size:11px;color:var(--mut);font-weight:600">${r.done}/${TOTAL} enviados</span></span>
+        <span class="lb-pts">${r.pts}</span>
+        <span class="chev">⌄</span>
+      </div>
+      <div class="lb-detail">${detail}</div>
+    </div>`;
+  }).join('');
+  lb.addEventListener('click',e=>{ const h=e.target.closest('.lb-head'); if(h) h.parentElement.classList.toggle('open'); });
+}
+function initials(name){ const p=String(name||'').trim().split(/\s+/); return ((p[0]?.[0]||'')+(p[1]?.[0]||'')).toUpperCase()||'·'; }
+
+/* ── MI POLLA ── */
+function viewMine(){
+  const done=MATCHES.filter(m=>{const p=myPreds[m.id];return p&&num(p.h)!==null&&num(p.a)!==null;});
+  let total=0; for(const m of MATCHES) total+=pointsFor(myPreds[m.id],results[m.id]);
+  const rows=done.map(m=>{
+    const p=myPreds[m.id],r=results[m.id]; const pts=r?pointsFor(p,r):null;
+    return `<tr><td style="color:var(--mut);font-size:11px">Grupo ${m.g}</td>
+      <td class="rname">${flagHTML(m.home,'flag-sm')} ${esc(m.home.n)} <b style="color:var(--gold);font-family:var(--mono)">${num(p.h)}-${num(p.a)}</b> ${esc(m.away.n)} ${flagHTML(m.away,'flag-sm')}</td>
+      <td style="text-align:right" class="rpts">${pts===null?'<span style="color:var(--mut)">pendiente</span>':'+'+pts}</td></tr>`;
+  }).join('');
+  return `<section class="hero"><div class="eyebrow">${esc(myName())}</div><h2>Mi polla</h2>
+    <p>${done.length} de ${TOTAL} partidos pronosticados · ${total} puntos.</p></section>
+    <div class="rank-box">${done.length?`<table><thead><tr><th>Partido</th><th>Tu marcador</th><th style="text-align:right">Pts</th></tr></thead><tbody>${rows}</tbody></table>`:'<div class="empty">Todavía no has pronosticado nada. Ve a Pronósticos.</div>'}</div>`;
+}
+
+/* ── ADMIN: gate ── */
+function openAdminGate(){
+  const root=document.getElementById('mroot');
+  root.innerHTML=`<div class="ov"><div class="modal">
+    <h3>🔒 Panel de admin</h3>
+    <p>Esta sección es solo para el organizador: generar el QR, ver participantes y cargar resultados.</p>
+    <input id="apin" class="pin" type="password" inputmode="numeric" placeholder="PIN" maxlength="8">
+    <button class="btn" id="aok" style="width:100%">Entrar</button>
+    <button class="btn ghost" id="acxl" style="width:100%;margin-top:8px">Cancelar</button>
+    <p style="margin-top:10px;font-size:12px">PIN de demo: <b style="color:var(--gold)">1234</b></p>
+  </div></div>`;
+  const inp=document.getElementById('apin'); inp.focus();
+  const ok=()=>{ if(inp.value===String(CFG.pin)){ adminUnlocked=true; adminSection='recv'; activeTab='admin'; root.innerHTML=''; setAdminBtn(); renderTabs(); render(); } else { inp.value=''; inp.placeholder='PIN incorrecto'; inp.focus(); } };
+  document.getElementById('aok').addEventListener('click',ok);
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter') ok(); });
+  document.getElementById('acxl').addEventListener('click',()=>root.innerHTML='');
+}
+
+/* ── ADMIN: panel ── */
+function viewAdmin(){
+  const subs=[['recv','👥 Participantes'],['results','📝 Resultados'],['qr','📲 Invitar · QR']];
+  const nav=subs.map(([k,l])=>`<button class="subtab" data-sub="${k}" aria-pressed="${k===adminSection}">${l}</button>`).join('');
+  let body='';
+  if(adminSection==='recv') body=secRecv();
+  else if(adminSection==='results') body=secResults();
+  else body=secQR();
+  return `<section class="hero"><div class="eyebrow gold">Solo organizador</div><h2>Panel de admin</h2>
+    <p>Generas el QR, ves quién se unió y cargas los resultados. Los participantes no ven esta sección.</p></section>
+    <div class="subnav">${nav}</div>${body}`;
+}
+function wireAdmin(){
+  document.querySelectorAll('.subtab').forEach(b=>b.addEventListener('click',()=>{ adminSection=b.dataset.sub; render(); }));
+  if(adminSection==='recv') renderAdminDash();
+  if(adminSection==='results'){
+    const c=document.getElementById('admCards');
+    c.addEventListener('input',onRes); c.addEventListener('change',onRes);
+    renderAdminDash();
+  }
+  if(adminSection==='qr') wireQR();
+}
+
+/* ADMIN · Participantes (recepción + ranking) */
+function secRecv(){
+  return `<div class="box">
+    <h4>Recepción de pronósticos</h4>
+    <p>Vista central: quién ya se unió por el QR, cuánto envió y cómo va el ranking.</p>
+    <div class="dstats" id="admStats"><div class="empty" style="padding:8px">Cargando…</div></div>
+    <div class="rank-box" id="admTable"><div class="empty">…</div></div>
+  </div>`;
+}
+async function renderAdminDash(){
+  const el=document.getElementById('admStats'), tbl=document.getElementById('admTable'); if(!el) return;
+  const rows=[]; let sent=0;
+  const allPreds = await sb.getAllPredictions();
+  const byUser = {};
+  allPreds.forEach(r=>{ if(!byUser[r.user_id]) byUser[r.user_id]={}; byUser[r.user_id][r.match_id]={h:r.home,a:r.away,scorer:r.scorer,yellow:r.yellow,red:r.red}; });
+  for(const p of participants){
+    const pr=byUser[p.id]||{}; let done=0,pts=0;
+    for(const m of MATCHES){ const x=pr[m.id]; if(x&&num(x.h)!==null&&num(x.a)!==null)done++; pts+=pointsFor(x,results[m.id]); }
+    sent+=done; rows.push({...p,done,pts});
+  }
+  rows.sort((a,b)=>b.pts-a.pts||b.done-a.done||a.name.localeCompare(b.name));
+  const resCount=Object.values(results).filter(r=>num(r.h)!==null&&num(r.a)!==null).length;
+  const medals={0:'🏆',1:'🥈',2:'🥉'};
+  el.innerHTML=`<div class="s"><b>${participants.length}</b><span>jugadores unidos</span></div>
+    <div class="s"><b style="color:var(--gold)">${sent}</b><span>pronósticos recibidos</span></div>
+    <div class="s"><b style="color:var(--coral)">${resCount}/${TOTAL}</b><span>resultados cargados</span></div>`;
+  const body=rows.length?rows.map((r,i)=>`<tr>
+    <td class="pos ${i<3?'top':''}">${medals[i]?`<span class="medal">${medals[i]}</span>`:i+1}</td>
+    <td class="rname ${r.id===me?'rme':''}">${esc(r.name)}</td>
+    <td><span class="bar-w"><span class="bar-f" style="width:${Math.round(r.done/TOTAL*100)}%"></span></span><span style="font-size:11px;color:var(--mut)">${r.done}/${TOTAL}</span></td>
+    <td class="rpts">${r.pts}</td></tr>`).join('')
+    :`<tr><td colspan="4" class="empty">Nadie se ha unido todavía. Comparte el QR.</td></tr>`;
+  tbl.innerHTML=`<table><thead><tr><th>#</th><th>Jugador</th><th>Enviado</th><th style="text-align:right">Pts</th></tr></thead><tbody>${body}</tbody></table>`;
+}
+
+/* ADMIN · Resultados */
+function secResults(){
+  const cards=MATCHES.map(m=>{
+    const r=results[m.id]||{};
+    return `<div class="adm-card" data-id="${m.id}">
+      <div class="adm-top"><span>Grupo ${m.g} · Jornada ${m.jor} · ⏰ ${m.hora} mx</span><span>📍 ${esc(m.sede)}</span></div>
+      <div class="adm-row">
+        <div class="adm-nm">${flagHTML(m.home,'flag')} ${esc(m.home.n)}</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input class="adm-sc" type="number" min="0" max="20" inputmode="numeric" data-k="h" value="${r.h??''}">
+          <span class="dash">–</span>
+          <input class="adm-sc" type="number" min="0" max="20" inputmode="numeric" data-k="a" value="${r.a??''}">
+        </div>
+        <div class="adm-nm">${esc(m.away.n)} ${flagHTML(m.away,'flag')}</div>
+      </div>
+      <div class="adm-extra" style="grid-template-columns:1fr 86px 86px">
+        <div style="grid-column:1/-1">${scorerSelect(m.id, r.scorer||'')}</div>
+        <select data-k="yellow"><option value="">🟨 amar.</option>${[0,1,2,3,4,5,6,7,8].map(n=>`<option value="${n}" ${String(r.yellow)===String(n)?'selected':''}>${n}${n===8?'+':''}</option>`).join('')}</select>
+        <select data-k="red"><option value="">🟥 rojas</option>${[0,1,2,3].map(n=>`<option value="${n}" ${String(r.red)===String(n)?'selected':''}>${n}${n===3?'+':''}</option>`).join('')}</select>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="box" style="margin-bottom:16px"><h4>Marcadores reales</h4><p>Carga el resultado final. Los puntos de todos se recalculan al instante.</p></div><div id="admCards">${cards}</div>`;
+}
+async function onRes(e){
+  const card=e.target.closest('.adm-card'); if(!card) return;
+  const id=card.dataset.id,k=e.target.dataset.k; if(!k) return;
+  results[id]=results[id]||{}; results[id][k]=e.target.value;
+  await sb.upsertResult(id, results[id]);
+  results = await sb.getResults();
+  updatePts(); renderAdminDash();
+}
+
+/* ADMIN · QR */
+function secQR(){
+  const currentUrl = (typeof location!=='undefined' && location.href && !location.href.startsWith('blob:')) ? location.href : '';
+  const isLocal = currentUrl.startsWith('file://') || currentUrl === '';
+  const warningHtml = isLocal
+    ? `<div style="background:rgba(246,196,83,.1);border:1px solid rgba(246,196,83,.35);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--gold);margin-bottom:10px;text-align:left">
+        ⚠️ <b>Modo prueba local:</b> el QR apunta a este archivo en tu computadora. Solo funciona en este mismo dispositivo. Cuando publiques en Vercel, pega esa URL aquí y regenera el QR — ese sí funcionará para los 200.
+       </div>`
+    : `<div style="background:rgba(25,224,138,.08);border:1px solid rgba(25,224,138,.3);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--green);margin-bottom:10px;text-align:left">
+        ✅ <b>URL detectada:</b> este QR ya funciona para compartir.
+       </div>`;
+  return `<div class="two">
+    <div class="box" style="text-align:center">
+      <h4>Código QR para unirse</h4>
+      <p>Compártelo o imprímelo. Al escanear, el participante solo podrá registrar su nombre y hacer sus pronósticos — no entra a este panel.</p>
+      <div class="qr-shell"><div id="qrcode"></div></div>
+      ${warningHtml}
+      <div class="urlrow"><input id="joinUrl" value="${esc(currentUrl)}" placeholder="Pega aquí la URL de Vercel" aria-label="Enlace"><button class="btn" id="regen">↻ Generar</button></div>
+      <button class="btn coral" id="dlqr" style="width:100%">Descargar QR (PNG)</button>
+    </div>
+    <div class="box">
+      <h4>Cómo funciona</h4>
+      <ol style="color:var(--mut);font-size:13px;padding-left:18px;margin-bottom:14px;line-height:1.7">
+        <li>El admin comparte este QR.</li>
+        <li>El compañero lo escanea y entra a <b style="color:var(--green)">"Unirme"</b>.</li>
+        <li>Escribe su nombre y queda registrado.</li>
+        <li>Hace sus pronósticos de los 2 partidos.</li>
+        <li>Aparece automáticamente en tu tabla de participantes.</li>
+      </ol>
+      <div class="stat-big"><b>${participants.length}</b><span>ya se unieron</span></div>
+      <p style="margin-top:14px">Reglas de puntaje</p>
+      <ul class="rules-list">
+        <li><b>${CFG.exact}</b> · marcador exacto</li>
+        <li><b>${CFG.outcome}</b> · acertar ganador o empate</li>
+        <li><b>+${CFG.scorer}</b> · goleador correcto</li>
+        <li><b>+${CFG.cardsY}</b> · amarillas correctas</li>
+        <li><b>+${CFG.cardsR}</b> · rojas correctas</li>
+      </ul>
+    </div>
+  </div>`;
+}
+function wireQR(){
+  function gen(){
+    const box=document.getElementById('qrcode'); if(!box) return; box.innerHTML='';
+    const url=document.getElementById('joinUrl').value||CFG.url;
+    typeof QRCode!=='undefined'
+      ? new QRCode(box,{text:url,width:192,height:192,colorDark:'#070B16',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})
+      : (box.innerHTML=`<div style="color:#070B16;font-size:12px;width:192px">${esc(url)}</div>`);
+  }
+  gen();
+  document.getElementById('regen').addEventListener('click',gen);
+  document.getElementById('dlqr').addEventListener('click',()=>{
+    const box=document.getElementById('qrcode'); const img=box.querySelector('img')||box.querySelector('canvas');
+    if(!img){alert('Genera el QR primero');return;}
+    const a=document.createElement('a'); a.href=img.tagName==='IMG'?img.src:img.toDataURL('image/png'); a.download='qr-polla.png'; a.click();
+  });
+}
+
+/* ── UNIRSE (lo que hace el QR) ── */
+function openJoin(first){
+  const root=document.getElementById('mroot');
+  root.innerHTML=`<div class="ov"><div class="modal">
+    <h3>${first?'⚽ Unirme a la polla':'Nuevo participante'}</h3>
+    <p>${first?'Escribe tu nombre para registrarte y pronosticar Panamá y Colombia del 17 de junio.':'Registra a un compañero de la empresa.'}</p>
+    <input id="pname" placeholder="Nombre y apellido" maxlength="40">
+    <button class="btn" id="join" style="width:100%">Entrar a la polla</button>
+    ${first&&!joinOnly?'':'<button class="btn ghost" id="cxl" style="width:100%;margin-top:8px">Cancelar</button>'}
+  </div></div>`;
+  const inp=document.getElementById('pname'); inp.focus();
+  const submit=async()=>{
+    const name=inp.value.trim(); if(!name) return inp.focus();
+    const id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    await sb.addParticipant(id, name);
+    participants.push({id,name});
+    me=id; myPreds={};
+    rebuildSel(); root.innerHTML=''; activeTab='play'; renderTabs(); render();
+  };
+  document.getElementById('join').addEventListener('click',submit);
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter') submit(); });
+  const cx=document.getElementById('cxl'); if(cx) cx.addEventListener('click',()=>{ rebuildSel(); root.innerHTML=''; if(!participants.length&&!me){} });
+}
+
+/* ── UTILS ── */
+function myName(){ return participants.find(x=>x.id===me)?.name||'Jugador'; }
+function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function renderFoot(){
+  document.getElementById('foot').innerHTML=
+    `Polla · Mié 17 Jun 2026 · 🇬🇭 Ghana vs 🇵🇦 Panamá (17:00 mx, Toronto) · 🇺🇿 Uzbekistán vs 🇨🇴 Colombia (20:00 mx, CDMX). Participantes escanean el QR para unirse; el control queda en el panel de admin (PIN).`;
+}
+</script>
+</body>
+</html>
